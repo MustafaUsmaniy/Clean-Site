@@ -35,7 +35,7 @@ Route::get('contact', [PageController::class, 'contact'])->name('contact');
 
 Route::resources([
     'posts' => PostsController::class,
-    'comments' => CommentController::class
+    'comments' => CommentController::class,
 ]);
 
 
