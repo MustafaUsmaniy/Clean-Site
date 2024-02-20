@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
@@ -33,9 +34,15 @@ Route::get('contact', [PageController::class, 'contact'])->name('contact');
 // Route::put('posts/{post}/edit', [PostsController::class, 'update'])->name('posts.update');
 // Route::delete('posts/{post}', [PostsController::class, 'destroy'])->name('posts.destroy');
 
+Route::middleware('auth')->group(function(){
+    Route::get('notififcations/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+});
+
+
 Route::resources([
     'posts' => PostsController::class,
     'comments' => CommentController::class,
+    'notifications' => NotificationController::class,
 ]);
 
 

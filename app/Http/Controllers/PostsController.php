@@ -10,9 +10,11 @@ use App\Mail\PostCreated as MailPostCreated;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Notifications\PostCreated as NotificationsPostCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
@@ -34,9 +36,6 @@ class PostsController extends Controller
         return view('posts.index')->with('posts', $posts);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('posts.create')->with([
@@ -79,6 +78,8 @@ class PostsController extends Controller
 
         // Queue orqali jo'natish
         Mail::to($request->user())->queue((new MailPostCreated($post))->onQueue('sending-mails'));
+
+        Notification::send(auth()->user(), new NotificationsPostCreated($post));
 
         return redirect()->route('posts.index');
     }
